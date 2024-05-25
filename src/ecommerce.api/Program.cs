@@ -1,7 +1,5 @@
-using MediatR;
-using NG.API.Extensions.Behaviors;
+using ecommerce.api.Extensions;
 using NG.EF.Common;
-using Serilog;
 using Application = ecommerce.application;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,25 +19,17 @@ configuration.GetSection(EFConfig.Position).Bind(efOptions);
 var applicationAssembly = typeof(Application.AssemblyReference).Assembly;
 builder.Services.AddControllers();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
-//builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
-
-//builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(SerilogPipelineBehavior<,>));
-
 builder.Services.AddInfrastructureConfiguration(efOptions);
 builder.Services.InjectSQLServerRepositories();
 builder.Services.AddHealthchecksConfig();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssembly(applicationAssembly);
-    //config.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
-builder.Services.ProblemDetailsConfiguration();
+builder.Services.AddFluentValidation("ecommerce.api.EndpointValidators");
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", cfg =>

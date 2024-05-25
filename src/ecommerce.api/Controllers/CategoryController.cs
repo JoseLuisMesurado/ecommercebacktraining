@@ -17,7 +17,6 @@ namespace ecommerce.api.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<ICollection<ProductResponse>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(AppProblemDetails))]
         public async Task<IActionResult> GetAsync()
         {
             var toReturn = await _mediator.Send(new CategoryGetAllQuery());

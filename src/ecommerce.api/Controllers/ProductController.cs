@@ -4,7 +4,6 @@ using ecommerce.core.Entities;
 using ecommerce.core.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using NG.API.Extensions;
 using NG.HttpResponse;
 
 namespace ecommerce.api.Controllers
@@ -19,7 +18,6 @@ namespace ecommerce.api.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<ICollection<ProductResponse>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(AppProblemDetails))]
         public async Task<IActionResult> GetAsync()
         {
             var toReturn = await _mediator.Send(new ProductGetAllQuery());
@@ -28,7 +26,6 @@ namespace ecommerce.api.Controllers
         [HttpGet("search/{searchtext}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<ICollection<ProductResponse>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(AppProblemDetails))]
         public async Task<IActionResult> SearchText(string searchtext)
         {
             var toReturn = await _mediator.Send(new ProductSearchByTextQuery { SearchText = searchtext });
@@ -43,7 +40,6 @@ namespace ecommerce.api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ApiResponse<Product<Guid>>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(AppProblemDetails))]
         public async Task<IActionResult> PostAsync(AddProductCommand toAdd)
         {
             var toReturn = await _mediator.Send(toAdd);
